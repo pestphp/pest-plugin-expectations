@@ -5,9 +5,10 @@ declare(strict_types=1);
 use Pest\Expectations\Concerns\Expectations;
 use Pest\Expectations\Expectation;
 use Pest\Expectations\Support\Extendable;
-use Pest\Plugin;
 
-Plugin::uses(Expectations::class);
+if (class_exists(Pest\Plugin::class)) {
+    Pest\Plugin::uses(Expectations::class);
+}
 
 /**
  * Creates a new expectation.
