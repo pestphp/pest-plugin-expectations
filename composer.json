@@ -1,6 +1,6 @@
 {
-    "name": "pestphp/pest-plugin-template",
-    "description": "My awesome plugin",
+    "name": "pestphp/pest-plugin-expectations",
+    "description": "Add expectations testing capabilities to Pest or PHPUnit",
     "keywords": [
         "php",
         "framework",
@@ -8,7 +8,7 @@
         "unit",
         "test",
         "testing",
-        "plugin"
+        "expectations"
     ],
     "license": "MIT",
     "require": {
