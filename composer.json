@@ -1,0 +1,52 @@
+{
+    "name": "pestphp/pest-plugin-template",
+    "description": "My awesome plugin",
+    "keywords": [
+        "php",
+        "framework",
+        "pest",
+        "unit",
+        "test",
+        "testing",
+        "plugin"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7.3 || ^8.0",
+        "pestphp/pest": "^0.3",
+        "pestphp/pest-plugin": "^0.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pest\\PluginName\\": "src/"
+        },
+        "files": [
+            "src/Autoload.php"
+        ]
+    },
+    "require-dev": {
+        "pestphp/pest-dev-tools": "dev-master"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.4.x-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "preferred-install": "dist"
+    },
+    "scripts": {
+        "lint": "rector process src && php-cs-fixer fix -v",
+        "test:lint": "php-cs-fixer fix -v --dry-run && rector process src --dry-run",
+        "test:types": "phpstan analyse --ansi",
+        "test:unit": "pest --colors=always",
+        "test": [
+            "@test:lint",
+            "@test:types",
+            "@test:unit"
+        ]
+    }
+}
