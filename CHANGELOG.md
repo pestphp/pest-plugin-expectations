@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.3.2 (2020-12-13)](https://github.com/pestphp/pest-plugin-expectations/compare/v0.3.1...v0.3.2)
+### Fixed
+- Usage of plugin outsite PEST ([4a2eb63](https://github.com/pestphp/pest-plugin-expectations/commit/4a2eb63fc3d3b97d7279fd30a5f0910da544d0fd))
+
 ## [v0.3.1 (2020-12-13)](https://github.com/pestphp/pest-plugin-expectations/compare/v0.3.0...v0.3.1)
 ### Fixed
 - Infinite `expect` call ([4c51a9c](https://github.com/pestphp/pest-plugin-expectations/commit/4c51a9c97237b1ab8d28b1dc4748569513a3df50))
