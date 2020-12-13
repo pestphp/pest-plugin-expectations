@@ -2,17 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Pest\PluginName;
-
+use Pest\Expectations\Concerns\Expectations;
+use Pest\Expectations\Expectation;
+use Pest\Expectations\Support\Extendable;
 use Pest\Plugin;
-use PHPUnit\Framework\TestCase;
 
-Plugin::uses(Example::class);
+Plugin::uses(Expectations::class);
 
 /**
- * @return TestCase
+ * Creates a new expectation.
+ *
+ * @param mixed $value the Value
+ *
+ * @return Expectation|Extendable
  */
-function example(string $argument)
+function expect($value = null)
 {
-    return test()->example(...func_get_args());
+    if (func_num_args() === 0) {
+        return new Extendable(Expectation::class);
+    }
+
+    return test()->expect($value);
 }
