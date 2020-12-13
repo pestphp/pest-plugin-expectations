@@ -1,4 +1,8 @@
-This repository contains the Pest Plugin Template.
+This repository contains the Pest Plugin Expectations. The Expectation API can be used in regular PHPUnit projects. For that, you just have to run the following command in your terminal:
+
+```bash
+composer require pestphp/pest-plugin-expectations --dev
+```
 
 > If you want to start testing your application with Pest, visit the main **[Pest Repository](https://github.com/pestphp/pest)**.
 
