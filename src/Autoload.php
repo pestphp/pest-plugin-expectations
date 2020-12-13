@@ -22,5 +22,5 @@ function expect($value = null)
         return new Extendable(Expectation::class);
     }
 
-    return test()->expect($value);
+    return new Expectation($value);
 }
