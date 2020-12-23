@@ -41,7 +41,7 @@ final class OppositeExpectation
                 continue;
             }
 
-            $this->throwExpectationFailedExpection('toHaveKey', [$key]);
+            $this->throwExpectationFailedException('toHaveKey', [$key]);
         }
 
         return $this->original;
@@ -62,7 +62,7 @@ final class OppositeExpectation
         }
 
         // @phpstan-ignore-next-line
-        $this->throwExpectationFailedExpection($name, $arguments);
+        $this->throwExpectationFailedException($name, $arguments);
     }
 
     /**
@@ -78,7 +78,7 @@ final class OppositeExpectation
         }
 
         // @phpstan-ignore-next-line
-        $this->throwExpectationFailedExpection($name);
+        $this->throwExpectationFailedException($name);
     }
 
     /**
@@ -87,7 +87,7 @@ final class OppositeExpectation
      *
      * @param array<int, mixed> $arguments
      */
-    private function throwExpectationFailedExpection(string $name, array $arguments = []): void
+    private function throwExpectationFailedException(string $name, array $arguments = []): void
     {
         $exporter = new Exporter();
 
