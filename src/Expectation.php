@@ -398,6 +398,17 @@ final class Expectation
     }
 
     /**
+     * Asserts that the value is a JSON string.
+     */
+    public function toBeJson(): Expectation
+    {
+        Assert::assertIsString($this->value);
+        Assert::assertJson($this->value);
+
+        return $this;
+    }
+
+    /**
      * Asserts that the value is NAN.
      */
     public function toBeNan(): Expectation
