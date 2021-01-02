@@ -1,6 +1,7 @@
 {
     "name": "pestphp/pest-plugin-expectations",
     "description": "Add expectations testing capabilities to Pest or PHPUnit",
+    "version": "0.3.3",
     "keywords": [
         "php",
         "framework",
