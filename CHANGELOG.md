@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.0.1 (2021-01-03)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.0.0...v1.0.1)
+### Changed
+- Version conflicts
+
 ## [v1.0.0 (2021-01-03)](https://github.com/pestphp/pest-plugin-expectations/compare/v0.3.3...v1.0.0)
 ### Changed
 - Stable version
