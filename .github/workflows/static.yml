@@ -2,6 +2,9 @@ name: Static Analysis
 
 on: ['push', 'pull_request']
 
+env:
+  COMPOSER_ROOT_VERSION: 1.x-dev
+
 jobs:
   cs:
     runs-on: ubuntu-latest
