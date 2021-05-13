@@ -65,6 +65,14 @@ final class Expectation
     }
 
     /**
+     * Allows for expectations to be run over Iterables.
+     */
+    public function every()
+    {
+        return new Every($this);
+    }
+
+    /**
      * Asserts that two variables have the same type and
      * value. Used on objects, it asserts that two
      * variables reference the same object.
