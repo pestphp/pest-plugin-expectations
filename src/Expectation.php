@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pest\Expectations;
 
+use BadMethodCallException;
 use Pest\Expectations\Concerns\Extendable;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint;
@@ -12,7 +13,8 @@ use SebastianBergmann\Exporter\Exporter;
 /**
  * @internal
  *
- * @property Expectation $not Creates the opposite expectation.
+ * @property Expectation $not  Creates the opposite expectation.
+ * @property Each        $each Creates an expectation on each element on the traversable value.
  */
 final class Expectation
 {
@@ -65,11 +67,21 @@ final class Expectation
     }
 
     /**
-     * Allows for expectations to be run over Iterables.
+     * Creates an expectation on each item of the traversable "value".
      */
-    public function every()
+    public function each(callable $callback = null): Each
     {
-        return new Every($this);
+        if (!is_iterable($this->value)) {
+            throw new BadMethodCallException('Expectation value is not traversable.');
+        }
+
+        if (is_callable($callback)) {
+            foreach ($this->value as $item) {
+                $callback(expect($item));
+            }
+        }
+
+        return new Each($this);
     }
 
     /**

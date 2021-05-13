@@ -82,8 +82,7 @@ final class OppositeExpectation
     }
 
     /**
-     * Creates a new expectation failed exception
-     * with a nice readable message.
+     * Creates a new expectation failed exception with a nice readable message.
      *
      * @param array<int, mixed> $arguments
      */

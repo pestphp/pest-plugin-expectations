@@ -48,6 +48,7 @@ trait Extendable
             throw new BadMethodCallException(sprintf('Method %s::%s does not exist.', static::class, $method));
         }
 
+        /** @var Closure $extend */
         $extend = static::$extends[$method]->bindTo($this, static::class);
 
         return $extend(...$parameters);
