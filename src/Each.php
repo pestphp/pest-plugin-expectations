@@ -17,6 +17,11 @@ final class Each
     private $original;
 
     /**
+     * @var bool
+     */
+    private $expectsOpposite = false;
+
+    /**
      * Creates an expectation on each item of the traversable "value".
      */
     public function __construct(Expectation $original)
@@ -37,9 +42,11 @@ final class Each
     /**
      * Creates the opposite expectation for the value.
      */
-    public function not(): OppositeExpectation
+    public function not(): Each
     {
-        return $this->original->not();
+        $this->expectsOpposite = true;
+
+        return $this;
     }
 
     /**
@@ -51,8 +58,10 @@ final class Each
     {
         foreach ($this->original->value as $item) {
             /* @phpstan-ignore-next-line */
-            expect($item)->$name(...$arguments);
+            $this->expectsOpposite ? expect($item)->not()->$name(...$arguments) : expect($item)->$name(...$arguments);
         }
+
+        $this->expectsOpposite = false;
 
         return $this;
     }
@@ -62,11 +71,7 @@ final class Each
      */
     public function __get(string $name): Each
     {
-        foreach ($this->original->value as $item) {
-            /* @phpstan-ignore-next-line */
-            expect($item)->$name();
-        }
-
-        return $this;
+        /* @phpstan-ignore-next-line */
+        return $this->$name();
     }
 }
