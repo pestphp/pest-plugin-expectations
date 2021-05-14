@@ -91,16 +91,16 @@ final class Expectation
      *
      * @param callable ...$expectations
      */
-    public function sequence(...$expectations)
+    public function sequence(...$expectations): Expectation
     {
         if (!is_iterable($this->value)) {
             throw new BadMethodCallException('Expectation value is not traversable.');
         }
 
-        $index = 0;
+        $expectationIndex = 0;
         while (count($expectations) < count($this->value)) {
-            $expectations[] = $expectations[$index];
-            $index = $index < count($this->value) - 1 ? $index + 1 : 0;
+            $expectations[] = $expectations[$expectationIndex];
+            $expectationIndex = $expectationIndex < count($this->value) - 1 ? $expectationIndex + 1 : 0;
         }
 
         foreach ($this->value as $index => $item) {
