@@ -67,7 +67,7 @@ final class Expectation
     }
 
     /**
-     * Creates an expectation on each item of the traversable "value".
+     * Creates an expectation on each item of the iterable "value".
      */
     public function each(callable $callback = null): Each
     {

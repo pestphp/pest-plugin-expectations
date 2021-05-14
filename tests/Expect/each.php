@@ -68,19 +68,22 @@ it('can add expectations via "and"', function () {
         ->and([4, 5, 6])
         ->each
         ->toBeLessThan(7) // + 3
+        ->not
+        ->toBeLessThan(3)
         ->toBeGreaterThan(3) // + 3
         ->and('Hello World')
         ->toBeString // + 1
         ->toEqual('Hello World'); // + 1
 
-    expect(static::getCount())->toBe(11);
+    expect(static::getCount())->toBe(14);
 });
 
 it('accepts callables', function () {
     expect([1, 2, 3])->each(function ($number) {
         expect($number)->toBeInstanceOf(Expectation::class);
+        expect($number->value)->toBeInt();
         $number->toBeInt->not->toBeString;
     });
 
-    expect(static::getCount())->toBe(9);
+    expect(static::getCount())->toBe(12);
 });
