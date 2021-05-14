@@ -36,13 +36,29 @@ it('chains expectations on each item', function () {
     expect(static::getCount())->toBe(13);
 });
 
-test('oposite expectations on each item', function () {
+test('opposite expectations on each item', function () {
     expect([1, 2, 3])
         ->each()
         ->not()
         ->toEqual(4);
 
     expect(static::getCount())->toBe(3);
+
+    expect([1, 2, 3])
+        ->each()
+        ->not->toBeString;
+
+    expect(static::getCount())->toBe(7);
+});
+
+test('chained opposite and non-opposite expectations', function () {
+    expect([1, 2, 3])
+        ->each()
+        ->not()
+        ->toEqual(4)
+        ->toBeInt();
+
+    expect(static::getCount())->toBe(6);
 });
 
 it('can add expectations via "and"', function () {
