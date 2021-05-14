@@ -98,8 +98,11 @@ final class Expectation
         }
 
         $expectationIndex = 0;
+
+        /* @phpstan-ignore-next-line */
         while (count($expectations) < count($this->value)) {
             $expectations[]   = $expectations[$expectationIndex];
+            /* @phpstan-ignore-next-line */
             $expectationIndex = $expectationIndex < count($this->value) - 1 ? $expectationIndex + 1 : 0;
         }
 
