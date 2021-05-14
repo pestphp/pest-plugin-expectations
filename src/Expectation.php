@@ -99,7 +99,7 @@ final class Expectation
 
         $expectationIndex = 0;
         while (count($expectations) < count($this->value)) {
-            $expectations[] = $expectations[$expectationIndex];
+            $expectations[]   = $expectations[$expectationIndex];
             $expectationIndex = $expectationIndex < count($this->value) - 1 ? $expectationIndex + 1 : 0;
         }
 
