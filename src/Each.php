@@ -58,9 +58,7 @@ final class Each
     {
         foreach ($this->original->value as $item) {
             /* @phpstan-ignore-next-line */
-            $this->expectsOpposite
-                ? expect($item)->not()->$name(...$arguments)
-                : expect($item)->$name(...$arguments);
+            $this->expectsOpposite ? expect($item)->not()->$name(...$arguments) : expect($item)->$name(...$arguments);
         }
 
         $this->expectsOpposite = false;
@@ -73,6 +71,7 @@ final class Each
      */
     public function __get(string $name): Each
     {
+        /* @phpstan-ignore-next-line */
         return $this->$name();
     }
 }
