@@ -85,35 +85,6 @@ final class Expectation
     }
 
     /**
-     * Allows you to specify a sequential set of
-     * expectations for each item in a
-     * traversable "value".
-     *
-     * @param callable ...$expectations
-     */
-    public function sequence(...$expectations): Expectation
-    {
-        if (!is_iterable($this->value)) {
-            throw new BadMethodCallException('Expectation value is not traversable.');
-        }
-
-        $expectationIndex = 0;
-
-        /* @phpstan-ignore-next-line */
-        while (count($expectations) < count($this->value)) {
-            $expectations[]   = $expectations[$expectationIndex];
-            /* @phpstan-ignore-next-line */
-            $expectationIndex = $expectationIndex < count($this->value) - 1 ? $expectationIndex + 1 : 0;
-        }
-
-        foreach ($this->value as $index => $item) {
-            call_user_func($expectations[$index], expect($item));
-        }
-
-        return $this;
-    }
-
-    /**
      * Asserts that two variables have the same type and
      * value. Used on objects, it asserts that two
      * variables reference the same object.

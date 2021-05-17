@@ -1,11 +1,12 @@
 <?php
 
 test('an exception is thrown if the the type is not iterable', function () {
-    expect('Foobar')->sequence();
+    expect('Foobar')->each->sequence();
 })->throws(BadMethodCallException::class, 'Expectation value is not traversable.');
 
 test('allows for sequences of checks to be run on traversable data', function () {
     expect([1, 2, 3])
+        ->each
         ->sequence(
             function ($expectation) { $expectation->toBeInt()->toEqual(1); },
             function ($expectation) { $expectation->toBeInt()->toEqual(2); },
@@ -17,6 +18,7 @@ test('allows for sequences of checks to be run on traversable data', function ()
 
 test('loops back to the start if it runs out of sequence items', function () {
     expect([1, 2, 3, 1, 2, 3, 1, 2])
+        ->each
         ->sequence(
             function ($expectation) { $expectation->toBeInt()->toEqual(1); },
             function ($expectation) { $expectation->toBeInt()->toEqual(2); },
@@ -28,6 +30,7 @@ test('loops back to the start if it runs out of sequence items', function () {
 
 test('it works if the number of items in the traversable is smaller than the number of expectations', function () {
     expect([1, 2])
+        ->each
         ->sequence(
             function ($expectation) { $expectation->toBeInt()->toEqual(1); },
             function ($expectation) { $expectation->toBeInt()->toEqual(2); },
