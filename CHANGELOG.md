@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.2.0 (2021-05-19)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.1.0...v1.2.0)
+### Added
+- Allows to create an `sequence` of expectations item of an iterable "value". ([#9](https://github.com/pestphp/pest-plugin-expectations/pull/9), [3b89b7d](https://github.com/pestphp/pest-plugin-expectations/commit/3b89b7ddc490811d3dc69ecaea6098f0f361147c))
+
 ## [v1.1.0 (2021-05-14)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.0.1...v1.1.0)
 ### Added
 - Allows to create an expectation on `each` item of an iterable "value". ([#7](https://github.com/pestphp/pest-plugin-expectations/pull/7))
