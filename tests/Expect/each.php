@@ -4,7 +4,7 @@ use Pest\Expectations\Expectation;
 
 test('an exception is thrown if the the type is not iterable', function () {
     expect('Foobar')->each()->toEqual('Foobar');
-})->throws(BadMethodCallException::class, 'Expectation value is not traversable.');
+})->throws(BadMethodCallException::class, 'Expectation value is not iterable.');
 
 it('expects on each item', function () {
     expect([1, 1, 1])

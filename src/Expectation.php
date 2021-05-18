@@ -72,7 +72,7 @@ final class Expectation
     public function each(callable $callback = null): Each
     {
         if (!is_iterable($this->value)) {
-            throw new BadMethodCallException('Expectation value is not traversable.');
+            throw new BadMethodCallException('Expectation value is not iterable.');
         }
 
         if (is_callable($callback)) {
@@ -82,6 +82,32 @@ final class Expectation
         }
 
         return new Each($this);
+    }
+
+    /**
+     * Allows you to specify a sequential set of expectations for each item in a iterable "value".
+     */
+    public function sequence(callable ...$callbacks): Expectation
+    {
+        if (!is_iterable($this->value)) {
+            throw new BadMethodCallException('Expectation value is not iterable.');
+        }
+
+        $index = 0;
+
+        /* @phpstan-ignore-next-line */
+        while (count($callbacks) < count($this->value)) {
+            $callbacks[] = $callbacks[$index];
+            /* @phpstan-ignore-next-line */
+            $index = $index < count($this->value) - 1 ? $index + 1 : 0;
+        }
+
+        /* @phpstan-ignore-next-line */
+        foreach ($this->value as $index => $item) {
+            call_user_func($callbacks[$index], expect($item));
+        }
+
+        return $this;
     }
 
     /**

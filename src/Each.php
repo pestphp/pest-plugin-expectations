@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Pest\Expectations;
 
-use BadMethodCallException;
-
 /**
  * @internal
  *
@@ -29,35 +27,6 @@ final class Each
     public function __construct(Expectation $original)
     {
         $this->original = $original;
-    }
-
-    /**
-     * Allows you to specify a sequential set of
-     * expectations for each item in a
-     * traversable "value".
-     *
-     * @param callable ...$expectations
-     */
-    public function sequence(...$expectations): Each
-    {
-        if (!is_iterable($this->original->value)) {
-            throw new BadMethodCallException('Expectation value is not traversable.');
-        }
-
-        $expectationIndex = 0;
-
-        /* @phpstan-ignore-next-line */
-        while (count($expectations) < count($this->original->value)) {
-            $expectations[] = $expectations[$expectationIndex];
-            /* @phpstan-ignore-next-line */
-            $expectationIndex = $expectationIndex < count($this->original->value) - 1 ? $expectationIndex + 1 : 0;
-        }
-
-        foreach ($this->original->value as $index => $item) {
-            call_user_func($expectations[$index], expect($item));
-        }
-
-        return $this;
     }
 
     /**
