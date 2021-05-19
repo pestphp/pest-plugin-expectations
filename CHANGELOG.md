@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.2.1 (2021-05-19)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.2.0...v1.2.1)
+### Changed
+- Check if global function is already defined. ([#10](https://github.com/pestphp/pest-plugin-expectations/pull/10), [e6f10ea](https://github.com/pestphp/pest-plugin-expectations/commit/e6f10ea3335f8e2167b444ec322f1a76b595ae07))
+
 ## [v1.2.0 (2021-05-19)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.1.0...v1.2.0)
 ### Added
 - Allows to create an `sequence` of expectations item of an iterable "value". ([#9](https://github.com/pestphp/pest-plugin-expectations/pull/9), [3b89b7d](https://github.com/pestphp/pest-plugin-expectations/commit/3b89b7ddc490811d3dc69ecaea6098f0f361147c))

@@ -10,7 +10,7 @@ if (class_exists(Pest\Plugin::class)) {
     Pest\Plugin::uses(Expectations::class);
 }
 
-if (! function_exists('expect')) {
+if (!function_exists('expect')) {
     /**
      * Creates a new expectation.
      *
