@@ -105,7 +105,7 @@ final class Expectation
         }
 
         foreach ($values as $key => $item) {
-            call_user_func($callbacks[$key], expect($item), $keys[$key]);
+            call_user_func($callbacks[$key], expect($item), expect($keys[$key]));
         }
 
         return $this;
