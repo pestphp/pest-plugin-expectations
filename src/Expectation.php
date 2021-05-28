@@ -93,18 +93,19 @@ final class Expectation
             throw new BadMethodCallException('Expectation value is not iterable.');
         }
 
+        $value  = is_array($this->value) ? $this->value : iterator_to_array($this->value);
+        $keys   = array_keys($value);
+        $values = array_values($value);
+
         $index = 0;
 
-        /* @phpstan-ignore-next-line */
-        while (count($callbacks) < count($this->value)) {
+        while (count($callbacks) < count($values)) {
             $callbacks[] = $callbacks[$index];
-            /* @phpstan-ignore-next-line */
-            $index = $index < count($this->value) - 1 ? $index + 1 : 0;
+            $index       = $index < count($values) - 1 ? $index + 1 : 0;
         }
 
-        /* @phpstan-ignore-next-line */
-        foreach ($this->value as $index => $item) {
-            call_user_func($callbacks[$index], expect($item));
+        foreach ($values as $key => $item) {
+            call_user_func($callbacks[$key], expect($item), $keys[$key]);
         }
 
         return $this;

@@ -36,3 +36,11 @@ test('it works if the number of items in the iterable is smaller than the number
 
     expect(static::getCount())->toBe(4);
 });
+
+test('it works with associative arrays', function () {
+    expect(['foo' => 'bar', 'baz' => 'boom'])
+        ->sequence(
+            function ($expectation, $key) { $expectation->toEqual('bar'); expect($key)->toEqual('foo'); },
+            function ($expectation, $key) { $expectation->toEqual('boom'); expect($key)->toEqual('baz'); },
+        );
+});
