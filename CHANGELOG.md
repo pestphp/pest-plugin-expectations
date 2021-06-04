@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.4.0 (2021-06-04)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.3.0...v1.4.0)
+### Added
+- `dd` method for dump the current value and exit. ([28b6f8f](https://github.com/pestphp/pest-plugin-expectations/commit/28b6f8f44ffba0cbf76b73370359e16e24b6f4f4))
+
 ## [v1.3.0 (2021-05-29)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.2.1...v1.3.0)
 ### Added
 - `sequence` method now creates expectation on keys. ([#11](https://github.com/pestphp/pest-plugin-expectations/pull/11))
