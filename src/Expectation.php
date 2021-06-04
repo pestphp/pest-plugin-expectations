@@ -59,6 +59,22 @@ final class Expectation
     }
 
     /**
+     * Dump the expectation value and end the script.
+     *
+     * @return never
+     */
+    public function dd(): void
+    {
+        if (function_exists('dd')) {
+            dd($this->value);
+        }
+
+        var_dump($this->value);
+
+        exit(1);
+    }
+
+    /**
      * Creates the opposite expectation for the value.
      */
     public function not(): OppositeExpectation
