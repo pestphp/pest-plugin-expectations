@@ -76,8 +76,6 @@ final class Expectation
 
     /**
      * Send the expectation value to Ray.
-     *
-     * @return self
      */
     public function ray(): self
     {
