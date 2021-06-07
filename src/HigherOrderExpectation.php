@@ -21,7 +21,7 @@ final class HigherOrderExpectation
     private $original;
 
     /**
-     * @var Expectation|Each|OppositeExpectation
+     * @var Expectation|Each
      */
     private $expectation;
 
