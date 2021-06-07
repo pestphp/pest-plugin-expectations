@@ -13,7 +13,7 @@ it('can access multiple properties from the value', function () {
 it('works with not', function () {
     expect(['foo' => 'bar', 'hello' => 'world'])
         ->foo->not->toEqual('world')->toEqual('bar')
-        ->hello->toEqual('world')->not()->toEqual('bar');
+        ->hello->toEqual('world')->not()->toEqual('bar')->not->toBeNull;
 });
 
 it('works with each', function () {

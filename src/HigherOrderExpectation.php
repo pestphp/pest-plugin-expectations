@@ -76,13 +76,7 @@ final class HigherOrderExpectation
      */
     public function __call(string $name, array $arguments): HigherOrderExpectation
     {
-        $this->expectation = $this->opposite
-            ? $this->expectation->not()->{$name}(...$arguments)
-            : $this->expectation->{$name}(...$arguments);
-
-        $this->opposite = false;
-
-        return $this;
+        return $this->performAssertion($name, ...$arguments);
     }
 
     /**
@@ -98,7 +92,20 @@ final class HigherOrderExpectation
             return new static($this->original, $name);
         }
 
-        $this->expectation = $this->expectation->{$name};
+        return $this->performAssertion($name);
+    }
+
+    /**
+     * Performs the given assertion with the current expectation.
+     */
+    private function performAssertion($name, ...$arguments)
+    {
+        $this->expectation = $this->opposite
+            ? $this->expectation->not()->{$name}(...$arguments)
+            : $this->expectation->{$name}(...$arguments);
+
+        $this->opposite = false;
+
         return $this;
     }
 
