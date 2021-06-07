@@ -77,10 +77,10 @@ final class Expectation
     /**
      * Send the expectation value to Ray.
      */
-    public function ray(): self
+    public function ray(...$arguments): self
     {
         if (function_exists('ray')) {
-            ray($this->value);
+            ray($this->value, ...$arguments);
         }
 
         return $this;
