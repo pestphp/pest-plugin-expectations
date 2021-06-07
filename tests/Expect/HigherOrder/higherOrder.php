@@ -19,7 +19,24 @@ it('works with not', function () {
 it('works with each', function () {
     expect(['numbers' => [1,2,3,4], 'words' => ['hey', 'there']])
         ->numbers->toEqual([1,2,3,4])->each->toBeInt->toBeLessThan(5)
-        ->words->each(fn ($word) => $word->toBeString())->not->toBeInt();
+        ->words->each(function ($word) {
+            $word->toBeString()->not->toBeInt();
+        });
+});
+
+it('works inside of each', function () {
+    expect(['books' => [['title' => 'Foo', 'cost' => 20], ['title' => 'Bar', 'cost' => 30]]])
+        ->books->each(function ($book) {
+            $book->title->not->toBeNull->cost->toBeGreaterThan(19);
+        });
+});
+
+it('works with sequence', function () {
+    expect(['books' => [['title' => 'Foo', 'cost' => 20], ['title' => 'Bar', 'cost' => 30]]])
+        ->books->sequence(
+            function ($book) { $book->title->toEqual('Foo')->cost->toEqual(20); },
+            function ($book) { $book->title->toEqual('Bar')->cost->toEqual(30); },
+        );
 });
 
 it('can compose complex expectations', function () {
@@ -31,7 +48,11 @@ it('can compose complex expectations', function () {
 });
 
 it('works with objects', function () {
-    expect((object) ['foo' => 'bar', 'numbers' => [1,2,3,4]])
-        ->foo->toEqual('bar')->not->toEqual('world')
-        ->numbers->each->toBeInt->tobeLessThan(5);
+    expect((object) ['name' => 'foo', 'posts' => [['is_published' => true, 'title' => 'Foo'], ['is_published' => true, 'title' => 'Bar']]])
+        ->name->toEqual('foo')->not->toEqual('world')
+        ->posts->toHaveCount(2)->each(function ($post) { $post->is_published->toBeTrue(); })
+        ->posts->sequence(
+            function ($post) { $post->title->toEqual('Foo'); },
+            function ($post) { $post->title->toEqual('Bar'); },
+        );
 });
