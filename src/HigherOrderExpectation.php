@@ -48,9 +48,17 @@ final class HigherOrderExpectation
     /**
      * Generates the initial state of the expectation.
      */
-    private function generateInitialExpectation($asMethod, ...$arguments)
+    private function generateInitialExpectation(bool $asMethod, ...$arguments)
     {
-        return $this->expect($asMethod ? $this->original->value->{$this->name}(...$arguments) : $this->getPropertyValue());
+        return $this->expect($asMethod ? $this->getMethodValue(...$arguments) : $this->getPropertyValue());
+    }
+
+    /**
+     * Retrieves the value of the method from the original expectation.
+     */
+    private function getMethodValue(...$arguments)
+    {
+        return $this->original->value->{$this->name}(...$arguments);
     }
 
     /**
