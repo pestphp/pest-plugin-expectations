@@ -33,16 +33,24 @@ final class HigherOrderExpectation
     /**
      * @var string
      */
-    private $property;
+    private $name;
 
     /**
      * Creates a new higher order expectation.
      */
-    public function __construct(Expectation $original, string $property)
+    public function __construct(Expectation $original, string $name, bool $asMethod = false, ...$arguments)
     {
         $this->original = $original;
-        $this->property = $property;
-        $this->expectation = $this->expect($this->getPropertyValue());
+        $this->name = $name;
+        $this->expectation = $this->generateInitialExpectation($asMethod, ...$arguments);
+    }
+
+    /**
+     * Generates the initial state of the expectation.
+     */
+    private function generateInitialExpectation($asMethod, ...$arguments)
+    {
+        return $this->expect($asMethod ? $this->original->value->{$this->name}(...$arguments) : $this->getPropertyValue());
     }
 
     /**
@@ -51,11 +59,11 @@ final class HigherOrderExpectation
     private function getPropertyValue()
     {
         if (is_array($this->original->value)) {
-            return $this->original->value[$this->property];
+            return $this->original->value[$this->name];
         }
 
         if (is_object($this->original->value)) {
-            return $this->original->value->{$this->property};
+            return $this->original->value->{$this->name};
         }
     }
 
@@ -76,6 +84,10 @@ final class HigherOrderExpectation
      */
     public function __call(string $name, array $arguments): HigherOrderExpectation
     {
+        if (!$this->originalHasMethod($name)) {
+            return new static($this->original, $name, true, ...$arguments);
+        }
+
         return $this->performAssertion($name, ...$arguments);
     }
 
@@ -88,11 +100,19 @@ final class HigherOrderExpectation
             return $this->not();
         }
 
-        if (!$this->originalExpectationHasMethod($name)) {
+        if (!$this->originalHasMethod($name)) {
             return new static($this->original, $name);
         }
 
         return $this->performAssertion($name);
+    }
+
+    /**
+     * Determines if the original expectation has the given method name.
+     */
+    private function originalHasMethod($name): bool
+    {
+        return method_exists($this->original, $name) || $this->original::hasExtend($name);
     }
 
     /**
@@ -107,13 +127,5 @@ final class HigherOrderExpectation
         $this->opposite = false;
 
         return $this;
-    }
-
-    /**
-     * Determines if the original expectation has the given method name.
-     */
-    private function originalExpectationHasMethod($name): bool
-    {
-        return method_exists($this->original, $name) || $this->original::hasExtend($name);
     }
 }

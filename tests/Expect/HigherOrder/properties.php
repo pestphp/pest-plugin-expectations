@@ -48,7 +48,7 @@ it('can compose complex expectations', function () {
 });
 
 it('works with objects', function () {
-    expect((object) ['name' => 'foo', 'posts' => [['is_published' => true, 'title' => 'Foo'], ['is_published' => true, 'title' => 'Bar']]])
+    expect(new HasProperties)
         ->name->toEqual('foo')->not->toEqual('world')
         ->posts->toHaveCount(2)->each(function ($post) { $post->is_published->toBeTrue(); })
         ->posts->sequence(
@@ -56,3 +56,19 @@ it('works with objects', function () {
             function ($post) { $post->title->toEqual('Bar'); },
         );
 });
+
+class HasProperties
+{
+    public $name = 'foo';
+
+    public $posts = [
+        [
+            'is_published' => true,
+            'title' => 'Foo'
+        ],
+        [
+            'is_published' => true,
+            'title' => 'Bar'
+        ]
+    ];
+}
