@@ -75,7 +75,7 @@ final class Expectation
     }
 
     /**
-     * Send the expectation value to Ray.
+     * Send the expectation value to Ray along with all given arguments.
      */
     public function ray(...$arguments): self
     {
