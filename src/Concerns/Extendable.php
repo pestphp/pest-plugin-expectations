@@ -44,7 +44,7 @@ trait Extendable
     public function __call(string $method, array $parameters)
     {
         if (!static::hasExtend($method)) {
-            return new HigherOrderExpectation($this, $method, true, ...$parameters);
+            return HigherOrderExpectation::forMethod($this, $method, ...$parameters);
         }
 
         /** @var Closure $extend */

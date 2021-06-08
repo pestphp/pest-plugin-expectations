@@ -28,7 +28,7 @@ final class HigherOrderExpectation
     /**
      * @var bool
      */
-    private $opposite;
+    private $opposite = false;
 
     /**
      * @var string
@@ -38,27 +38,21 @@ final class HigherOrderExpectation
     /**
      * Creates a new higher order expectation.
      */
-    public function __construct(Expectation $original, string $name, bool $asMethod = false, ...$arguments)
+    public function __construct(Expectation $original, string $name)
     {
         $this->original = $original;
         $this->name = $name;
-        $this->expectation = $this->generateInitialExpectation($asMethod, ...$arguments);
     }
 
     /**
-     * Generates the initial state of the expectation.
+     * Create a new higher order expectation for a property.
      */
-    private function generateInitialExpectation(bool $asMethod, ...$arguments)
+    public static function forProperty(Expectation $original, string $property): HigherOrderExpectation
     {
-        return $this->expect($asMethod ? $this->getMethodValue(...$arguments) : $this->getPropertyValue());
-    }
+        $instance = new static($original, $property);
+        $instance->expectation = $instance->expect($instance->getPropertyValue());
 
-    /**
-     * Retrieves the value of the method from the original expectation.
-     */
-    private function getMethodValue(...$arguments)
-    {
-        return $this->original->value->{$this->name}(...$arguments);
+        return $instance;
     }
 
     /**
@@ -76,11 +70,30 @@ final class HigherOrderExpectation
     }
 
     /**
+     * Create a new higher order expectation for a method call.
+     */
+    public static function forMethod(Expectation $original, string $method, ...$arguments): HigherOrderExpectation
+    {
+        $instance = new static($original, $method);
+        $instance->expectation = $instance->expect($instance->getMethodValue(...$arguments));
+
+        return $instance;
+    }
+
+    /**
+     * Retrieves the value of the method from the original expectation.
+     */
+    private function getMethodValue(...$arguments)
+    {
+        return $this->original->value->{$this->name}(...$arguments);
+    }
+
+    /**
      * Creates the opposite expectation for the value.
      */
     public function not(): HigherOrderExpectation
     {
-        $this->opposite = true;
+        $this->opposite = !$this->opposite;
 
         return $this;
     }
@@ -93,7 +106,7 @@ final class HigherOrderExpectation
     public function __call(string $name, array $arguments): HigherOrderExpectation
     {
         if (!$this->originalHasMethod($name)) {
-            return new static($this->original, $name, true, ...$arguments);
+            return static::forMethod($this->original, $name, ...$arguments);
         }
 
         return $this->performAssertion($name, ...$arguments);
@@ -109,7 +122,7 @@ final class HigherOrderExpectation
         }
 
         if (!$this->originalHasMethod($name)) {
-            return new static($this->original, $name);
+            return static::forProperty($this->original, $name);
         }
 
         return $this->performAssertion($name);
@@ -126,7 +139,7 @@ final class HigherOrderExpectation
     /**
      * Performs the given assertion with the current expectation.
      */
-    private function performAssertion($name, ...$arguments)
+    private function performAssertion($name, ...$arguments): HigherOrderExpectation
     {
         $this->expectation = $this->opposite
             ? $this->expectation->not()->{$name}(...$arguments)

@@ -688,7 +688,7 @@ final class Expectation
     public function __get(string $name)
     {
         if (!method_exists($this, $name) && !static::hasExtend($name)) {
-            return new HigherOrderExpectation($this, $name);
+            return HigherOrderExpectation::forProperty($this, $name);
         }
 
         /* @phpstan-ignore-next-line */
