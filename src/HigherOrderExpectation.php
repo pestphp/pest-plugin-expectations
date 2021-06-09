@@ -38,21 +38,21 @@ final class HigherOrderExpectation
     /**
      * Creates a new higher order expectation.
      */
-    public function __construct(Expectation $original, string $name)
+    public function __construct(Expectation $original, string $name, ?array $parameters = null)
     {
         $this->original = $original;
         $this->name = $name;
+        $this->generateInitialExpectation($parameters);
     }
 
     /**
-     * Create a new higher order expectation for a property.
+     * Generates the initial expectation for use within the higher order expectation.
      */
-    public static function forProperty(Expectation $original, string $property): HigherOrderExpectation
+    private function generateInitialExpectation(?array $parameters = null)
     {
-        $instance = new static($original, $property);
-        $instance->expectation = $instance->expect($instance->getPropertyValue());
-
-        return $instance;
+        $this->expectation = $this->expect(
+            is_null($parameters) ?  $this->getPropertyValue() : $this->getMethodValue($parameters)
+        );
     }
 
     /**
@@ -70,20 +70,9 @@ final class HigherOrderExpectation
     }
 
     /**
-     * Create a new higher order expectation for a method call.
-     */
-    public static function forMethod(Expectation $original, string $method, ...$arguments): HigherOrderExpectation
-    {
-        $instance = new static($original, $method);
-        $instance->expectation = $instance->expect($instance->getMethodValue(...$arguments));
-
-        return $instance;
-    }
-
-    /**
      * Retrieves the value of the method from the original expectation.
      */
-    private function getMethodValue(...$arguments)
+    private function getMethodValue(array $arguments)
     {
         return $this->original->value->{$this->name}(...$arguments);
     }
@@ -99,17 +88,17 @@ final class HigherOrderExpectation
     }
 
     /**
-     * Dynamically calls methods on the class with the given arguments on each item.
+     * Dynamically calls methods on the class with the given parameters on each item.
      *
-     * @param array<int|string, mixed> $arguments
+     * @param array<int|string, mixed> $parameters
      */
-    public function __call(string $name, array $arguments): HigherOrderExpectation
+    public function __call(string $name, array $parameters): HigherOrderExpectation
     {
         if (!$this->originalHasMethod($name)) {
-            return static::forMethod($this->original, $name, ...$arguments);
+            return new static($this->original, $name, $parameters);
         }
 
-        return $this->performAssertion($name, ...$arguments);
+        return $this->performAssertion($name, ...$parameters);
     }
 
     /**
@@ -122,7 +111,7 @@ final class HigherOrderExpectation
         }
 
         if (!$this->originalHasMethod($name)) {
-            return static::forProperty($this->original, $name);
+            return new static($this->original, $name);
         }
 
         return $this->performAssertion($name);
