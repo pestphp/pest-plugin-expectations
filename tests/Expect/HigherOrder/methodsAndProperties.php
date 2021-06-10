@@ -4,8 +4,9 @@ it('can access methods and properties', function () {
     expect(new HasMethodsAndProperties())
         ->name->toEqual('Has Methods and Properties')->not()->toEqual('bar')
         ->multiply(3, 4)->not->toBeString->toEqual(12)
-        ->posts->each(fn ($post) => $post->is_published->toBeTrue)
-        ->books()->toBeArray()
+        ->posts->each(function ($post) {
+            $post->is_published->toBeTrue;
+        })->books()->toBeArray()
         ->posts->toBeArray->each->not->toBeEmpty
         ->books()->sequence(
             function ($book) { $book->title->toEqual('Foo')->cost->toEqual(20); },
