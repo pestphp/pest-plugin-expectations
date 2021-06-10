@@ -75,6 +75,18 @@ final class Expectation
     }
 
     /**
+     * Send the expectation value to Ray along with all given arguments.
+     */
+    public function ray(...$arguments): self
+    {
+        if (function_exists('ray')) {
+            ray($this->value, ...$arguments);
+        }
+
+        return $this;
+    }
+
+    /**
      * Creates the opposite expectation for the value.
      */
     public function not(): OppositeExpectation
