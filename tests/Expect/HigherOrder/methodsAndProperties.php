@@ -1,7 +1,7 @@
 <?php
 
 it('can access methods and properties', function () {
-    expect(new HasMethodsAndProperties)
+    expect(new HasMethodsAndProperties())
         ->name->toEqual('Has Methods and Properties')->not()->toEqual('bar')
         ->multiply(3, 4)->not->toBeString->toEqual(12)
         ->posts->each(fn ($post) => $post->is_published->toBeTrue)
@@ -20,12 +20,12 @@ class HasMethodsAndProperties
     public $posts = [
         [
             'is_published' => true,
-            'title' => 'Foo'
+            'title'        => 'Foo',
         ],
         [
             'is_published' => true,
-            'title' => 'Bar'
-        ]
+            'title'        => 'Bar',
+        ],
     ];
 
     public function books()
@@ -33,11 +33,11 @@ class HasMethodsAndProperties
         return [
             [
                 'title' => 'Foo',
-                'cost' => 20,
+                'cost'  => 20,
             ],
             [
                 'title' => 'Bar',
-                'cost' => 30,
+                'cost'  => 30,
             ],
         ];
     }

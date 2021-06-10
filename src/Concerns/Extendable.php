@@ -39,7 +39,6 @@ trait Extendable
      * @param array<int, mixed> $parameters
      *
      * @return mixed
-     *
      */
     public function __call(string $method, array $parameters)
     {

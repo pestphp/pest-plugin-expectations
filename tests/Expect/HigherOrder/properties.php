@@ -18,8 +18,8 @@ it('works with not', function () {
 });
 
 it('works with each', function () {
-    expect(['numbers' => [1,2,3,4], 'words' => ['hey', 'there']])
-        ->numbers->toEqual([1,2,3,4])->each->toBeInt->toBeLessThan(5)
+    expect(['numbers' => [1, 2, 3, 4], 'words' => ['hey', 'there']])
+        ->numbers->toEqual([1, 2, 3, 4])->each->toBeInt->toBeLessThan(5)
         ->words->each(function ($word) {
             $word->toBeString()->not->toBeInt();
         });
@@ -41,15 +41,15 @@ it('works with sequence', function () {
 });
 
 it('can compose complex expectations', function () {
-    expect(['foo' => 'bar', 'numbers' => [1,2,3,4]])
+    expect(['foo' => 'bar', 'numbers' => [1, 2, 3, 4]])
         ->toContain('bar')->toBeArray()
-        ->numbers->toEqual([1,2,3,4])->not()->toEqual('bar')->each->toBeInt
+        ->numbers->toEqual([1, 2, 3, 4])->not()->toEqual('bar')->each->toBeInt
         ->foo->not->toEqual('world')->toEqual('bar')
         ->numbers->toBeArray();
 });
 
 it('works with objects', function () {
-    expect(new HasProperties)
+    expect(new HasProperties())
         ->name->toEqual('foo')->not->toEqual('world')
         ->posts->toHaveCount(2)->each(function ($post) { $post->is_published->toBeTrue(); })
         ->posts->sequence(
@@ -65,11 +65,11 @@ class HasProperties
     public $posts = [
         [
             'is_published' => true,
-            'title' => 'Foo'
+            'title'        => 'Foo',
         ],
         [
             'is_published' => true,
-            'title' => 'Bar'
-        ]
+            'title'        => 'Bar',
+        ],
     ];
 }

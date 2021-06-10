@@ -37,43 +37,41 @@ final class HigherOrderExpectation
 
     /**
      * Creates a new higher order expectation.
+     *
+     * @param array<int|string, mixed>|null $parameters
+     * @phpstan-ignore-next-line
      */
     public function __construct(Expectation $original, string $name, ?array $parameters = null)
     {
         $this->original = $original;
-        $this->name = $name;
-        $this->generateInitialExpectation($parameters);
-    }
+        $this->name     = $name;
 
-    /**
-     * Generates the initial expectation for use within the higher order expectation.
-     */
-    private function generateInitialExpectation(?array $parameters = null)
-    {
         $this->expectation = $this->expect(
-            is_null($parameters) ?  $this->getPropertyValue() : $this->getMethodValue($parameters)
+            is_null($parameters) ? $this->getPropertyValue() : $this->getMethodValue($parameters)
         );
     }
 
     /**
      * Retrieves the property value from the original expectation.
      */
-    private function getPropertyValue()
+    private function getPropertyValue(): mixed
     {
         if (is_array($this->original->value)) {
             return $this->original->value[$this->name];
         }
 
-        if (is_object($this->original->value)) {
-            return $this->original->value->{$this->name};
-        }
+        // @phpstan-ignore-next-line
+        return $this->original->value->{$this->name};
     }
 
     /**
      * Retrieves the value of the method from the original expectation.
+     *
+     * @param array<int|string, mixed> $arguments
      */
-    private function getMethodValue(array $arguments)
+    private function getMethodValue(array $arguments): mixed
     {
+        // @phpstan-ignore-next-line
         return $this->original->value->{$this->name}(...$arguments);
     }
 
@@ -88,51 +86,55 @@ final class HigherOrderExpectation
     }
 
     /**
-     * Dynamically calls methods on the class with the given parameters on each item.
+     * Dynamically calls methods on the class with the given arguments on each item.
      *
-     * @param array<int|string, mixed> $parameters
+     * @param array<int|string, mixed> $arguments
      */
-    public function __call(string $name, array $parameters): HigherOrderExpectation
+    public function __call(string $name, array $arguments): self
     {
         if (!$this->originalHasMethod($name)) {
-            return new static($this->original, $name, $parameters);
+            return new self($this->original, $name, $arguments);
         }
 
-        return $this->performAssertion($name, ...$parameters);
+        return $this->performAssertion($name, $arguments);
     }
 
     /**
      * Accesses properties in the value or in the expectation.
      */
-    public function __get(string $name): HigherOrderExpectation
+    public function __get(string $name): self
     {
-        if ($name == 'not') {
+        if ($name === 'not') {
             return $this->not();
         }
 
         if (!$this->originalHasMethod($name)) {
-            return new static($this->original, $name);
+            return new self($this->original, $name);
         }
 
-        return $this->performAssertion($name);
+        return $this->performAssertion($name, []);
     }
 
     /**
      * Determines if the original expectation has the given method name.
      */
-    private function originalHasMethod($name): bool
+    private function originalHasMethod(string $name): bool
     {
         return method_exists($this->original, $name) || $this->original::hasExtend($name);
     }
 
     /**
      * Performs the given assertion with the current expectation.
+     *
+     * @param array<int|string, mixed> $arguments
      */
-    private function performAssertion($name, ...$arguments): HigherOrderExpectation
+    private function performAssertion(string $name, array $arguments): self
     {
-        $this->expectation = $this->opposite
-            ? $this->expectation->not()->{$name}(...$arguments)
-            : $this->expectation->{$name}(...$arguments);
+        $expectation = $this->opposite
+            ? $this->expectation->not()
+            : $this->expectation;
+
+        $this->expectation = $expectation->{$name}(...$arguments); // @phpstan-ignore-line
 
         $this->opposite = false;
 
