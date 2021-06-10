@@ -697,12 +697,17 @@ final class Expectation
     }
 
     /**
-     * Dynamically calls methods on the class without any arguments.
+     * Dynamically calls methods on the class without any arguments
+     * or creates a new higher order expectation.
      *
-     * @return Expectation
+     * @return Expectation|HigherOrderExpectation
      */
     public function __get(string $name)
     {
+        if (!method_exists($this, $name) && !static::hasExtend($name)) {
+            return new HigherOrderExpectation($this, $name);
+        }
+
         /* @phpstan-ignore-next-line */
         return $this->{$name}();
     }

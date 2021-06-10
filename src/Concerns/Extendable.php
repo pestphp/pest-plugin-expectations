@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Pest\Expectations\Concerns;
 
-use BadMethodCallException;
 use Closure;
+use Pest\Expectations\HigherOrderExpectation;
 
 /**
  * @internal
@@ -40,12 +40,11 @@ trait Extendable
      *
      * @return mixed
      *
-     * @throws BadMethodCallException
      */
     public function __call(string $method, array $parameters)
     {
         if (!static::hasExtend($method)) {
-            throw new BadMethodCallException(sprintf('Method %s::%s does not exist.', static::class, $method));
+            return new HigherOrderExpectation($this, $method, $parameters);
         }
 
         /** @var Closure $extend */
