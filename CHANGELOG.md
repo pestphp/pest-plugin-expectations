@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v1.6.0 (2021-06-10)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.5.0...v1.6.0)
+### Added
+- Higher order expectations. ([#12](https://github.com/pestphp/pest-plugin-expectations/pull/12))
+
 ## [v1.5.0 (2021-06-10)](https://github.com/pestphp/pest-plugin-expectations/compare/v1.4.0...v1.5.0)
 ### Added
 - `ray` method for debug the current value. ([#13](https://github.com/pestphp/pest-plugin-expectations/pull/13))
