@@ -53,8 +53,10 @@ final class HigherOrderExpectation
 
     /**
      * Retrieves the property value from the original expectation.
+     *
+     * @return mixed
      */
-    private function getPropertyValue(): mixed
+    private function getPropertyValue()
     {
         if (is_array($this->original->value)) {
             return $this->original->value[$this->name];
@@ -68,8 +70,10 @@ final class HigherOrderExpectation
      * Retrieves the value of the method from the original expectation.
      *
      * @param array<int|string, mixed> $arguments
+     *
+     * @return mixed
      */
-    private function getMethodValue(array $arguments): mixed
+    private function getMethodValue(array $arguments)
     {
         // @phpstan-ignore-next-line
         return $this->original->value->{$this->name}(...$arguments);
