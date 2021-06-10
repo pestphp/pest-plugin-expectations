@@ -90,7 +90,7 @@ final class HigherOrderExpectation
     }
 
     /**
-     * Dynamically calls methods on the class with the given arguments on each item.
+     * Dynamically calls methods on the class with the given arguments.
      *
      * @param array<int|string, mixed> $arguments
      */
