@@ -1,5 +1,5 @@
 <?php
 
-it('will not blow up when ray is not installed', function () {
+test('ray calls do not fail when ray is not installed', function () {
     expect(true)->ray()->toBe(true);
 });

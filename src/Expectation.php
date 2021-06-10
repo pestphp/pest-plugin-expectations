@@ -61,12 +61,14 @@ final class Expectation
     /**
      * Dump the expectation value and end the script.
      *
+     * @param mixed $arguments
+     *
      * @return never
      */
-    public function dd(): void
+    public function dd(...$arguments): void
     {
         if (function_exists('dd')) {
-            dd($this->value);
+            dd($this->value, ...$arguments);
         }
 
         var_dump($this->value);
@@ -76,10 +78,13 @@ final class Expectation
 
     /**
      * Send the expectation value to Ray along with all given arguments.
+     *
+     * @param mixed $arguments
      */
     public function ray(...$arguments): self
     {
         if (function_exists('ray')) {
+            // @phpstan-ignore-next-line
             ray($this->value, ...$arguments);
         }
 
