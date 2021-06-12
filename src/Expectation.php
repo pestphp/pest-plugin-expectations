@@ -6,6 +6,7 @@ namespace Pest\Expectations;
 
 use BadMethodCallException;
 use Pest\Expectations\Concerns\Extendable;
+use Pest\Expectations\Helpers\Arr;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint;
 use SebastianBergmann\Exporter\Exporter;
@@ -522,10 +523,10 @@ final class Expectation
             $array = (array) $this->value;
         }
 
-        Assert::assertArrayHasKey($key, $array);
+        Assert::assertTrue(Arr::has($array, $key));
 
         if (func_num_args() > 1) {
-            Assert::assertEquals($value, $array[$key]);
+            Assert::assertEquals($value, Arr::get($array, $key));
         }
 
         return $this;
