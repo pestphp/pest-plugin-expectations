@@ -28,19 +28,39 @@ final class HigherOrderExpectation
     private $expectation;
 
     /**
+     * @var mixed
+     */
+    private $value;
+
+    /**
+     * @var mixed
+     */
+    private $initialValue;
+
+    /**
      * @var bool
      */
     private $opposite = false;
 
     /**
+     * @var bool
+     */
+    private $lastCallWasAssertion = false;
+
+    /**
      * Creates a new higher order expectation.
      *
      * @param mixed $value
+     * @param mixed $initialValue
+     *
+     * @phpstan-ignore-next-line
      */
-    public function __construct(Expectation $original, $value)
+    public function __construct(Expectation $original, $value, $initialValue = null)
     {
-        $this->original    = $original;
-        $this->expectation = $this->expect($value);
+        $this->original     = $original;
+        $this->expectation  = $this->expect($value);
+        $this->value        = $value;
+        $this->initialValue = $initialValue ?? $original->value;
     }
 
     /**
@@ -61,8 +81,12 @@ final class HigherOrderExpectation
     public function __call(string $name, array $arguments): self
     {
         if (!$this->originalHasMethod($name)) {
-            // @phpstan-ignore-next-line
-            return new self($this->original, $this->original->value->$name(...$arguments));
+            return new self(
+                $this->original,
+                /* @phpstan-ignore-next-line */
+                ($this->lastCallWasAssertion ? $this->initialValue : $this->value)->$name(...$arguments),
+                $this->initialValue
+            );
         }
 
         return $this->performAssertion($name, $arguments);
@@ -78,7 +102,11 @@ final class HigherOrderExpectation
         }
 
         if (!$this->originalHasMethod($name)) {
-            return new self($this->original, $this->retrieve($name, $this->original->value));
+            return new self(
+                $this->original,
+                $this->retrieve($name, $this->lastCallWasAssertion ? $this->initialValue : $this->value),
+                $this->initialValue
+            );
         }
 
         return $this->performAssertion($name, []);
@@ -105,7 +133,8 @@ final class HigherOrderExpectation
 
         $this->expectation = $expectation->{$name}(...$arguments); // @phpstan-ignore-line
 
-        $this->opposite = false;
+        $this->lastCallWasAssertion = true;
+        $this->opposite             = false;
 
         return $this;
     }
