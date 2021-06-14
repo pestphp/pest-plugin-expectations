@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Pest\Expectations\Helpers;
 
 /**
- * Class Arr.
- *
  * Credits: most of this class methods and implementations
  * belongs to the Arr helper of laravel/framework project
- * (https://github.com/laravel/framework)
+ * (https://github.com/laravel/framework).
+ *
+ * @internal
  */
 final class Arr
 {
