@@ -9,6 +9,7 @@ use Pest\Expectations\Concerns\Extendable;
 use Pest\Expectations\Helpers\Arr;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint;
+use PHPUnit\Framework\ExpectationFailedException;
 use SebastianBergmann\Exporter\Exporter;
 
 /**
@@ -523,7 +524,13 @@ final class Expectation
             $array = (array) $this->value;
         }
 
-        Assert::assertTrue(Arr::has($array, $key), "Failed asserting that an array has the key '$key'");
+        try {
+            Assert::assertTrue(Arr::has($array, $key));
+
+            /* @phpstan-ignore-next-line  */
+        } catch (ExpectationFailedException $exception) {
+            throw new ExpectationFailedException("Failed asserting that an array has the key '$key'", $exception->getComparisonFailure());
+        }
 
         if (func_num_args() > 1) {
             Assert::assertEquals($value, Arr::get($array, $key));
