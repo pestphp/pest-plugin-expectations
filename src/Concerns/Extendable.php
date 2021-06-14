@@ -43,7 +43,8 @@ trait Extendable
     public function __call(string $method, array $parameters)
     {
         if (!static::hasExtend($method)) {
-            return new HigherOrderExpectation($this, $method, $parameters);
+            /* @phpstan-ignore-next-line */
+            return new HigherOrderExpectation($this, $this->value->$method(...$parameters));
         }
 
         /** @var Closure $extend */

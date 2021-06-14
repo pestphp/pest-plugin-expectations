@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pest\Expectations;
 
 use Pest\Expectations\Concerns\Expectations;
+use Pest\Expectations\Concerns\RetrievesValues;
 
 /**
  * @internal
@@ -14,6 +15,7 @@ use Pest\Expectations\Concerns\Expectations;
 final class HigherOrderExpectation
 {
     use Expectations;
+    use RetrievesValues;
 
     /**
      * @var Expectation
@@ -31,52 +33,14 @@ final class HigherOrderExpectation
     private $opposite = false;
 
     /**
-     * @var string
-     */
-    private $name;
-
-    /**
      * Creates a new higher order expectation.
      *
-     * @param array<int|string, mixed>|null $parameters
-     * @phpstan-ignore-next-line
+     * @param mixed $value
      */
-    public function __construct(Expectation $original, string $name, ?array $parameters = null)
+    public function __construct(Expectation $original, $value)
     {
-        $this->original = $original;
-        $this->name     = $name;
-
-        $this->expectation = $this->expect(
-            is_null($parameters) ? $this->getPropertyValue() : $this->getMethodValue($parameters)
-        );
-    }
-
-    /**
-     * Retrieves the property value from the original expectation.
-     *
-     * @return mixed
-     */
-    private function getPropertyValue()
-    {
-        if (is_array($this->original->value)) {
-            return $this->original->value[$this->name];
-        }
-
-        // @phpstan-ignore-next-line
-        return $this->original->value->{$this->name};
-    }
-
-    /**
-     * Retrieves the value of the method from the original expectation.
-     *
-     * @param array<int|string, mixed> $arguments
-     *
-     * @return mixed
-     */
-    private function getMethodValue(array $arguments)
-    {
-        // @phpstan-ignore-next-line
-        return $this->original->value->{$this->name}(...$arguments);
+        $this->original    = $original;
+        $this->expectation = $this->expect($value);
     }
 
     /**
@@ -97,7 +61,8 @@ final class HigherOrderExpectation
     public function __call(string $name, array $arguments): self
     {
         if (!$this->originalHasMethod($name)) {
-            return new self($this->original, $name, $arguments);
+            // @phpstan-ignore-next-line
+            return new self($this->original, $this->original->value->$name(...$arguments));
         }
 
         return $this->performAssertion($name, $arguments);
@@ -113,7 +78,7 @@ final class HigherOrderExpectation
         }
 
         if (!$this->originalHasMethod($name)) {
-            return new self($this->original, $name);
+            return new self($this->original, $this->retrieve($name, $this->original->value));
         }
 
         return $this->performAssertion($name, []);
