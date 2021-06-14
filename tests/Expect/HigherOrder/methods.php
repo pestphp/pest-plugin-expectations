@@ -61,8 +61,8 @@ it('can compose complex expectations', function () {
 
 it('can handle nested method calls', function () {
     expect(new HasMethods())
-        ->newInstance()->newInstance()->name()->toEqual('Has Methods')
-        ->newInstance()->name()->toEqual('Has Methods')
+        ->newInstance()->newInstance()->name()->toEqual('Has Methods')->toBeString()
+        ->newInstance()->name()->toEqual('Has Methods')->not->toBeInt
         ->name()->toEqual('Has Methods');
 });
 
