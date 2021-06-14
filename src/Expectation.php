@@ -101,11 +101,20 @@ final class Expectation
 
     /**
      * Creates an expectation on each item of the iterable "value".
+     *
+     * @param callable|mixed $callback
+     * @param mixed          $arguments
+     *
+     * @return Each|Expectation
      */
-    public function each(callable $callback = null): Each
+    public function each($callback = null, ...$arguments)
     {
         if (!is_iterable($this->value)) {
             throw new BadMethodCallException('Expectation value is not iterable.');
+        }
+
+        if (count($arguments) > 0) {
+            return $this->sequence($callback, ...$arguments);
         }
 
         if (is_callable($callback)) {
