@@ -523,7 +523,7 @@ final class Expectation
             $array = (array) $this->value;
         }
 
-        Assert::assertTrue(Arr::has($array, $key));
+        Assert::assertTrue(Arr::has($array, $key), "Failed asserting that an array has the key '$key'");
 
         if (func_num_args() > 1) {
             Assert::assertEquals($value, Arr::get($array, $key));
