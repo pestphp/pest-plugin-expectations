@@ -16,9 +16,9 @@ it('can access methods and properties', function () {
 
 it('can handle nested methods and properties', function () {
     expect(new HasMethodsAndProperties())
-        ->meta->foo->bar->toBeString()->toEqual('baz')
+        ->meta->foo->bar->toBeString()->toEqual('baz')->not->toBeInt
         ->newInstance()->meta->foo->toBeArray()
-        ->newInstance()->multiply(2, 2)->toEqual(4)
+        ->newInstance()->multiply(2, 2)->toEqual(4)->not->toEqual(5)
         ->newInstance()->books()->toBeArray();
 });
 
