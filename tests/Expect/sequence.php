@@ -50,3 +50,13 @@ test('it can be passed non-callable values', function () {
 
     expect(static::getCount())->toBe(3);
 });
+
+test('it can be passed a mixture of value types', function () {
+    expect(['foo', 'bar', 'baz'])->sequence(
+        'foo',
+        function ($expectation) { $expectation->toEqual('bar')->toBeString(); },
+        'baz'
+    );
+
+    expect(static::getCount())->toBe(4);
+});
