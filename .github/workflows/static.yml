@@ -29,6 +29,9 @@ jobs:
       run: vendor/bin/php-cs-fixer fix -v --allow-risky=yes --dry-run --ansi
 
   phpstan:
+    env:
+      COMPOSER_ROOT_VERSION: dev-master
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
