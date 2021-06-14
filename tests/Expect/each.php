@@ -87,17 +87,3 @@ it('accepts callables', function () {
 
     expect(static::getCount())->toBe(12);
 });
-
-test('it can be passed multiple arguments and defers to sequence if so', function () {
-    expect(['foo', 'bar', 'baz'])->sequence('foo', 'bar', 'baz');
-
-    expect(static::getCount())->toBe(3);
-
-    expect(['foo', 'bar', 'baz'])->each(
-        'foo',
-        function ($expectation) { $expectation->toEqual('bar')->toBeString(); },
-        'baz'
-    );
-
-    expect(static::getCount())->toBe(8); // +1 for first count check
-});
