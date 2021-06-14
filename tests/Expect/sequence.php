@@ -44,3 +44,9 @@ test('it works with associative arrays', function () {
             function ($expectation, $key) { $expectation->toEqual('boom'); $key->toEqual('baz'); },
         );
 });
+
+test('it can be passed non-callable values', function () {
+    expect(['foo', 'bar', 'baz'])->sequence('foo', 'bar', 'baz');
+
+    expect(static::getCount())->toBe(3);
+});
