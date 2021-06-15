@@ -40,7 +40,7 @@ final class HigherOrderExpectation
     /**
      * @var bool
      */
-    private $lastCallWasAssertion = false;
+    private $shouldReset = false;
 
     /**
      * Creates a new higher order expectation.
@@ -72,11 +72,8 @@ final class HigherOrderExpectation
     public function __call(string $name, array $arguments): self
     {
         if (!$this->expectationHasMethod($name)) {
-            return new self(
-                $this->original,
-                /* @phpstan-ignore-next-line */
-                ($this->lastCallWasAssertion ? $this->original->value : $this->value)->$name(...$arguments),
-            );
+            /* @phpstan-ignore-next-line */
+            return new self($this->original, $this->getValue()->$name(...$arguments));
         }
 
         return $this->performAssertion($name, $arguments);
@@ -92,10 +89,7 @@ final class HigherOrderExpectation
         }
 
         if (!$this->expectationHasMethod($name)) {
-            return new self(
-                $this->original,
-                $this->retrieve($name, $this->lastCallWasAssertion ? $this->original->value : $this->value),
-            );
+            return new self($this->original, $this->retrieve($name, $this->getValue()));
         }
 
         return $this->performAssertion($name, []);
@@ -110,6 +104,16 @@ final class HigherOrderExpectation
     }
 
     /**
+     * Retrieve the applicable value based on the current reset condition.
+     *
+     * @return mixed
+     */
+    private function getValue()
+    {
+        return $this->shouldReset ? $this->original->value : $this->value;
+    }
+
+    /**
      * Performs the given assertion with the current expectation.
      *
      * @param array<int|string, mixed> $arguments
@@ -119,8 +123,8 @@ final class HigherOrderExpectation
         /* @phpstan-ignore-next-line */
         $this->expectation = ($this->opposite ? $this->expectation->not() : $this->expectation)->{$name}(...$arguments);
 
-        $this->opposite             = false;
-        $this->lastCallWasAssertion = true;
+        $this->opposite    = false;
+        $this->shouldReset = true;
 
         return $this;
     }
