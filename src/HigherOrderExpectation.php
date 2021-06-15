@@ -6,6 +6,8 @@ namespace Pest\Expectations;
 
 use Pest\Expectations\Concerns\Expectations;
 use Pest\Expectations\Concerns\RetrievesValues;
+use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * @internal
@@ -94,7 +96,12 @@ final class HigherOrderExpectation
      */
     private function expectationHasMethod(string $name): bool
     {
-        return method_exists($this->original, $name) || $this->original::hasExtend($name);
+        $methodNames = array_map(
+            function ($method): string { return strtolower($method->getName()); },
+            (new ReflectionClass($this->original))->getMethods(ReflectionMethod::IS_PUBLIC)
+        );
+
+        return in_array(strtolower($name), $methodNames, true) || $this->original::hasExtend($name);
     }
 
     /**
