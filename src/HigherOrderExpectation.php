@@ -116,14 +116,11 @@ final class HigherOrderExpectation
      */
     private function performAssertion(string $name, array $arguments): self
     {
-        $expectation = $this->opposite
-            ? $this->expectation->not()
-            : $this->expectation;
+        /* @phpstan-ignore-next-line */
+        $this->expectation = ($this->opposite ? $this->expectation->not() : $this->expectation)->{$name}(...$arguments);
 
-        $this->expectation = $expectation->{$name}(...$arguments); // @phpstan-ignore-line
-
-        $this->lastCallWasAssertion = true;
         $this->opposite             = false;
+        $this->lastCallWasAssertion = true;
 
         return $this;
     }
