@@ -33,11 +33,6 @@ final class HigherOrderExpectation
     private $value;
 
     /**
-     * @var mixed
-     */
-    private $initialValue;
-
-    /**
      * @var bool
      */
     private $opposite = false;
@@ -51,16 +46,12 @@ final class HigherOrderExpectation
      * Creates a new higher order expectation.
      *
      * @param mixed $value
-     * @param mixed $initialValue
-     *
-     * @phpstan-ignore-next-line
      */
-    public function __construct(Expectation $original, $value, $initialValue = null)
+    public function __construct(Expectation $original, $value)
     {
         $this->original     = $original;
         $this->expectation  = $this->expect($value);
         $this->value        = $value;
-        $this->initialValue = $initialValue ?? $original->value;
     }
 
     /**
@@ -80,12 +71,11 @@ final class HigherOrderExpectation
      */
     public function __call(string $name, array $arguments): self
     {
-        if (!$this->originalHasMethod($name)) {
+        if (!$this->expectationHasMethod($name)) {
             return new self(
                 $this->original,
                 /* @phpstan-ignore-next-line */
-                ($this->lastCallWasAssertion ? $this->initialValue : $this->value)->$name(...$arguments),
-                $this->initialValue
+                ($this->lastCallWasAssertion ? $this->original->value : $this->value)->$name(...$arguments),
             );
         }
 
@@ -101,11 +91,10 @@ final class HigherOrderExpectation
             return $this->not();
         }
 
-        if (!$this->originalHasMethod($name)) {
+        if (!$this->expectationHasMethod($name)) {
             return new self(
                 $this->original,
-                $this->retrieve($name, $this->lastCallWasAssertion ? $this->initialValue : $this->value),
-                $this->initialValue
+                $this->retrieve($name, $this->lastCallWasAssertion ? $this->original->value : $this->value),
             );
         }
 
@@ -115,7 +104,7 @@ final class HigherOrderExpectation
     /**
      * Determines if the original expectation has the given method name.
      */
-    private function originalHasMethod(string $name): bool
+    private function expectationHasMethod(string $name): bool
     {
         return method_exists($this->original, $name) || $this->original::hasExtend($name);
     }
