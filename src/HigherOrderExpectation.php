@@ -28,11 +28,6 @@ final class HigherOrderExpectation
     private $expectation;
 
     /**
-     * @var mixed
-     */
-    private $value;
-
-    /**
      * @var bool
      */
     private $opposite = false;
@@ -51,7 +46,6 @@ final class HigherOrderExpectation
     {
         $this->original     = $original;
         $this->expectation  = $this->expect($value);
-        $this->value        = $value;
     }
 
     /**
@@ -110,7 +104,7 @@ final class HigherOrderExpectation
      */
     private function getValue()
     {
-        return $this->shouldReset ? $this->original->value : $this->value;
+        return $this->shouldReset ? $this->original->value : $this->expectation->value;
     }
 
     /**
