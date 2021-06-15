@@ -19,7 +19,9 @@ use SebastianBergmann\Exporter\Exporter;
  */
 final class Expectation
 {
-    use Extendable;
+    use Extendable {
+        __call as __extendsCall;
+    }
     use RetrievesValues;
 
     /**
@@ -696,6 +698,24 @@ final class Expectation
         }
 
         return $this->exporter->export($value);
+    }
+
+    /**
+     * Dynamically handle calls to the class or
+     * creates a new higher order expectation.
+     *
+     * @param array<int, mixed> $parameters
+     *
+     * @return mixed
+     */
+    public function __call(string $method, array $parameters)
+    {
+        if (!static::hasExtend($method)) {
+            /* @phpstan-ignore-next-line */
+            return new HigherOrderExpectation($this, $this->value->$method(...$parameters));
+        }
+
+        return $this->__extendsCall($method, $parameters);
     }
 
     /**
