@@ -12,8 +12,8 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3 || ^8.0",
-        "phpunit/phpunit": "^9.0"
+        "php": "^7.4 || ^8.0",
+        "phpunit/phpunit": "10.0.x-dev"
     },
     "conflict": {
         "pestphp/pest": "<1.0"
@@ -27,7 +27,7 @@
         ]
     },
     "require-dev": {
-        "pestphp/pest": "^1.0",
+        "pestphp/pest": "dev-feat/phpunit-10-support",
         "pestphp/pest-dev-tools": "dev-master"
     },
     "extra": {
